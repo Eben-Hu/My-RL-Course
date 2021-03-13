@@ -33,6 +33,8 @@ class Grid:
             # if move out of the grids
             next_state = state
             return next_state, self.normal_reward
+        elif list(next_state) in self.terminate_state:
+            return next_state, self.final_reward
         else:
             return next_state, self.normal_reward
 
