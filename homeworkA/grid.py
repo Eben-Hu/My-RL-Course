@@ -64,5 +64,3 @@ class Grid:
                 final_state, current_reward = self.step(initial_state, action)
                 episode.append([list(initial_state), action, current_reward, list(final_state)])
                 initial_state = final_state
-
-

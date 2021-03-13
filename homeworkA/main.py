@@ -6,7 +6,6 @@ play = Grid()
 iterations = 100000
 values = np.zeros((4, 4))
 returns = {(i, j): list() for i in range(4) for j in range(4)}
-deltas = {(i, j): list() for i in range(4) for j in range(4)}
 gamma = 0.9
 
 for a in range(iterations):
@@ -18,12 +17,13 @@ for a in range(iterations):
         if step[0] not in [x[0] for x in episode[::-1][i+1:]]:  # justify whether step[0] is the first meet
             idx = (step[0][0], step[0][1])  # idx is (x, y)
             returns[idx].append(G)
-            newValue = np.average(returns[idx])
-            # deltas[idx[0], idx[1]].append(np.abs(values[idx[0], idx[1]]-newValue))
-            values[idx[0], idx[1]] = newValue
+            temp_values = np.average(returns[idx])
+            values[idx[0], idx[1]] = temp_values
+    # show the process every 5000 iterations
     if a % 5000 == 0:
         print(f'This is the No.{a} iterations.')
         print(values)
 
+# the final state value functions
+print('The final state values are:')
 print(values)
-
