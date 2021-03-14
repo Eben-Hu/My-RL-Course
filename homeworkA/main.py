@@ -4,11 +4,11 @@ import numpy as np
 # (2) state-values predicted by first view Monte Carlo
 GAMMA = 0.9
 GAMMA1 = 1
+# state-values predicted by first view Monte Carlo
 play = Grid()
 episodes = 100000
 values = np.zeros((4, 4))
 returns = {(i, j): list() for i in range(4) for j in range(4)}
-
 
 for a in range(episodes):
     episode = play.generate_episode()
