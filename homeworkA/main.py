@@ -52,18 +52,8 @@ returns = {(i, j): list() for i in range(4) for j in range(4)}
 # print(f'The final policy performance R_Avg is {sum(sum(values))/15}:')
 
 # （4） the optimal tabular policy with Q-learning and its policy performance R_Avg
-q_tables = 
+q_tables = np.zeros((16, 4), dtype=np.float) + np.random.normal(0, 0.3, (16, 4))
+q_tables[15][:] = 0
+q = play.q_learning(q_tables)
+print(q)
 
-
-def generate_episode(self):
-    # this function is for Monte Carlo to generate episodes
-    initial_state = random.choice(self.states[:-1])
-    episode = []  # episode contains [s0, action0, reward1,s1, s1, action1,...sT-1, actionT-1, final_reward, sT]
-    while True:
-        if list(initial_state) in self.terminate_state:
-            return episode
-        else:
-            action = self.get_action()
-            final_state, current_reward = self.step(initial_state, action)
-            episode.append([list(initial_state), action, current_reward, list(final_state)])
-            initial_state = final_state
