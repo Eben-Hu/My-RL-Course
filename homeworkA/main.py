@@ -12,6 +12,7 @@ episodes = 100000
 values = np.zeros((4, 4))
 returns = {(i, j): list() for i in range(4) for j in range(4)}
 
+
 # for a in range(episodes):
 #     episode = play.generate_episode()
 #     G = 0
@@ -52,8 +53,17 @@ returns = {(i, j): list() for i in range(4) for j in range(4)}
 # print(f'The final policy performance R_Avg is {sum(sum(values))/15}:')
 
 # （4） the optimal tabular policy with Q-learning and its policy performance R_Avg
+def extraction(q_table):
+    policy_list = []
+    for row in range(len(q_table)):
+        policy_list.append(actions[np.argmax(q_table[row])])
+    print(np.array(policy_list).reshape(4, 4))
+
+
 q_tables = np.zeros((16, 4), dtype=np.float) + np.random.normal(0, 0.3, (16, 4))
 q_tables[15][:] = 0
-q = play.q_learning(q_tables)
+actions = ['up', 'down', 'left', 'right']
+for episode in range(10000):
+    _, q = play.q_learning(q_tables)
 print(q)
-
+extraction(q)
