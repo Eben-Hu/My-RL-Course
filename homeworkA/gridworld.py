@@ -1,9 +1,8 @@
-from abc import ABC
 import gym
 import numpy as np
 
 
-class GridWorld(gym.Env, ABC):
+class GridWorld(gym.Env):
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 30
@@ -32,7 +31,7 @@ class GridWorld(gym.Env, ABC):
         self.episodes = []  # (s0, a1, s1), (s1, a1, s2),...
         return np.random.randint(range(0, self.n_width * self.n_height))
 
-    # def get_action(self):
+    # def get_action(self):  # this should belongs to policies
     #     random_action = self.action_space.sample()
     #     p = np.random.random()
     #     if p < 0.8:
