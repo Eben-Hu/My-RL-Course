@@ -75,7 +75,7 @@ class Grid:
         episode = []
         while True:
             if list(initial_state) in self.terminate_state:
-                return episode
+                return episode, q_tables
             else:
                 p = np.random.random()
                 initial_sequence = self.pair_to_sequence(initial_state)  # initial_sequence = St
@@ -99,7 +99,6 @@ class Grid:
                     next_action = self.actions_pairs[self.actions[next_action_index]]  # next_action = At+1
                     q_tables[initial_sequence][action_index] = q_tables[initial_sequence][action_index] + self.alpha * (current_reward + self.discount * (q_tables[final_sequence][next_action_index] - q_tables[initial_sequence][action_index]))
                     initial_state = final_state
-        return q_tables
 
 
 
