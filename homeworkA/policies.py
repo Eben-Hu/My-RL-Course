@@ -1,4 +1,7 @@
 
+def random_uniform():
+
+
 def monte_carlo(env, player):
 episodes = []
 env.reset()
