@@ -127,9 +127,13 @@ actions = gym.spaces.Discrete(4)
 #     print(f'a // 4 is {a // 4}')
 #     print(f'a % 4 is {a % 4}')
 
-a = np.array([[1,2,3,4], [5,6,7,8]])
-print(len(a))
-print(np.argmax(a[0]))
-print(type(a[0][1]))
+a = np.array([[1,0,0,0], [0,1,0,0],[0,0,1,0], [0, 0, 0,1]])
+actions = ['up', 'down', 'left', 'right']
+policy = []
+for row in range(len(a)):
+    policy.append(actions[np.argmax(a[row])])
+print(a)
+print(np.array(policy).reshape(2,2))
+
 
 
