@@ -36,7 +36,7 @@ def first_visit_monte_carlo_evaluate(discount=0.9):
         G = 0
         for i, obs in enumerate(observations[::-1]):  # reverse the list observations and rewards
             G = GAMMA * G + rewards[::-1][i]
-            if obs not in observations[::-1][i+1:]:
+            if obs not in observations[::-1][i + 1:]:
                 returns[obs].append(G)
                 temp = np.average(returns[obs])
                 values[obs] = temp
@@ -53,7 +53,7 @@ def epsilon_greedy(obs, q_tables):
     EPSILON = 0.1
     action_indexes = {0: -4, 1: 4, 2: -1, 3: 1}
     p = np.random.random()
-    if p < EPSILON/4:
+    if p < EPSILON / 4:
         action = stochastic()
     else:
         action_index = np.argmax(q_tables[obs])
@@ -69,7 +69,7 @@ def q_learning(q_tables):
     indexes_actions = {-4: 0, 4: 1, -1: 2, 1: 3}
     number_of_episodes = 10000
     for episode in range(number_of_episodes):
-        max_step_number = 100
+        max_step_number = 1000
         env = GridWorld()
         obs = env.reset()
         number = 0  # the number of steps in one episode which is no more than max_step_number
@@ -77,12 +77,13 @@ def q_learning(q_tables):
             action = epsilon_greedy(obs, q_tables)  # action = A
             action_index = indexes_actions[action]
             next_obs, reward, done, _ = env.step(action)  # next_obs = S', reward = R
-            q_tables[obs][action_index] = q_tables[obs][action_index] + ALPHA * (reward + GAMMA * max(q_tables[next_obs]) - q_tables[obs][action_index])
+            q_tables[obs][action_index] = q_tables[obs][action_index] + ALPHA * (
+                        reward + GAMMA * max(q_tables[next_obs]) - q_tables[obs][action_index])
             obs = next_obs
             number += 1
             if done == 1 or number == max_step_number:  # reach final state or max number step
                 break
-        for row in range(len(q_tables)):
-            policy_list.append(actions[np.argmax(q_tables[row])])
-        optimal_policy = np.array(policy_list).reshape(4, 4)
-        return q_tables, optimal_policy
+    for row in range(len(q_tables)):
+        policy_list.append(actions[np.argmax(q_tables[row])])
+    optimal_policy = np.array(policy_list).reshape(4, 4)
+    return q_tables, optimal_policy
