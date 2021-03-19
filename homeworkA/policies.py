@@ -29,10 +29,10 @@ def first_visit_monte_carlo_evaluate(discount=0.9):
     policy = Get_Action()
     values = np.zeros(16)
     returns = {state: list() for state in range(16)}
-    number_of_episodes = 200000
+    number_of_episodes = 10000
     for episode in range(number_of_episodes):
         observations, _, rewards, _ = generate_one_episode(env, policy)
-        observations.pop()
+        observations.pop()  # exclude the sT
         G = 0
         for i, obs in enumerate(observations[::-1]):  # reverse the list observations and rewards
             G = GAMMA * G + rewards[::-1][i]
