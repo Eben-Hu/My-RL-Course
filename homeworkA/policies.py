@@ -1,6 +1,7 @@
 from gridworld import GridWorld
 from utilities import Get_Action
 import numpy as np
+GAMMA = 0.9
 
 
 def generate_one_episode(env, policy, max_episode_number=1000):
@@ -23,8 +24,7 @@ def generate_one_episode(env, policy, max_episode_number=1000):
     return observations, actions, rewards, dones
 
 
-def first_visit_monte_carlo_evaluate(discount=0.9):
-    GAMMA = discount
+def first_visit_monte_carlo_evaluate(gamma=GAMMA):
     env = GridWorld()
     policy = Get_Action()
     values = np.zeros(16)
@@ -35,11 +35,10 @@ def first_visit_monte_carlo_evaluate(discount=0.9):
         observations.pop()  # exclude the sT
         G = 0
         for i, obs in enumerate(observations[::-1]):  # reverse the list observations and rewards
-            G = GAMMA * G + rewards[::-1][i]
+            G = gamma * G + rewards[::-1][i]
             if obs not in observations[::-1][i + 1:]:
                 returns[obs].append(G)
-                temp = np.average(returns[obs])
-                values[obs] = temp
+                values[obs] = np.average(returns[obs])
             values[15] = 0
     return values
 
@@ -50,7 +49,7 @@ def stochastic(obs=None):
 
 
 def epsilon_greedy(obs, q_tables):
-    EPSILON = 0.1
+    EPSILON = 0.4
     action_indexes = {0: -4, 1: 4, 2: -1, 3: 1}
     p = np.random.random()
     if p < EPSILON / 4:
@@ -61,16 +60,13 @@ def epsilon_greedy(obs, q_tables):
     return action
 
 
-def q_learning(q_tables):
+def q_learning(q_tables, number_of_episodes=10000, max_step_number=1000):
     ALPHA = 0.001
-    GAMMA = 0.9
     policy_list = []  # contains the final approximate optimal policy
+    env = GridWorld()
     actions = ['up', 'down', 'left', 'right']
     indexes_actions = {-4: 0, 4: 1, -1: 2, 1: 3}
-    number_of_episodes = 10000
     for episode in range(number_of_episodes):
-        max_step_number = 1000
-        env = GridWorld()
         obs = env.reset()
         number = 0  # the number of steps in one episode which is no more than max_step_number
         while True:  # one episode
