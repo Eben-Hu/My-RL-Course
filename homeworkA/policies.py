@@ -2,6 +2,7 @@ from gridworld import GridWorld
 from utilities import Get_Action
 import numpy as np
 GAMMA = 0.9
+ALPHA = 0.001
 
 
 def generate_one_episode(env, policy, max_episode_number=1000):
@@ -39,6 +40,8 @@ def first_visit_monte_carlo_evaluate(gamma=GAMMA, number_of_episodes=100000):
                 returns[obs].append(G)
                 values[obs] = np.average(returns[obs])
             values[15] = 0
+        if episode % 10000 == 0:
+            print(f"In the No.{episode} the values are {values}.")
     return values
 
 
@@ -48,23 +51,23 @@ def stochastic(obs=None):
 
 
 def epsilon_greedy(obs, q_tables):
-    EPSILON = 0.4
+    EPSILON = 0.1
     action_indexes = {0: -4, 1: 4, 2: -1, 3: 1}
     p = np.random.random()
-    if p < EPSILON / 4:
-        action = stochastic()
-    else:
+    if p < (1 - EPSILON):
         action_index = np.argmax(q_tables[obs])
         action = action_indexes[action_index]
+    else:
+        action = stochastic()
     return action
 
 
-def q_learning(q_tables, number_of_episodes=10000, max_step_number=1000):
-    ALPHA = 0.001
+def q_learning(q_tables, gamma=GAMMA, alpha=0.001, number_of_episodes=10000, max_step_number=1000):
     policy_list = []  # contains the final approximate optimal policy
     env = GridWorld()
     actions = ['up', 'down', 'left', 'right']
     indexes_actions = {-4: 0, 4: 1, -1: 2, 1: 3}
+    rewards = 0
     for episode in range(number_of_episodes):
         obs = env.reset()
         number = 0  # the number of steps in one episode which is no more than max_step_number
@@ -72,13 +75,15 @@ def q_learning(q_tables, number_of_episodes=10000, max_step_number=1000):
             action = epsilon_greedy(obs, q_tables)  # action = A
             action_index = indexes_actions[action]
             next_obs, reward, done, _ = env.step(action)  # next_obs = S', reward = R
-            q_tables[obs][action_index] = q_tables[obs][action_index] + ALPHA * (
-                        reward + GAMMA * max(q_tables[next_obs]) - q_tables[obs][action_index])
+            rewards += reward
+            q_tables[obs][action_index] = q_tables[obs][action_index] + alpha * (
+                        reward + gamma * max(q_tables[next_obs]) - q_tables[obs][action_index])
             obs = next_obs
             number += 1
             if done == 1 or number == max_step_number:  # reach final state or max number step
                 break
     for row in range(len(q_tables)):
         policy_list.append(actions[np.argmax(q_tables[row])])
+    performance = rewards/number_of_episodes
     optimal_policy = np.array(policy_list).reshape(4, 4)
-    return q_tables, optimal_policy
+    return q_tables, optimal_policy, performance
