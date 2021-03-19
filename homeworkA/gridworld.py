@@ -7,7 +7,7 @@ class GridWorld(gym.Env, ABC):
     def __init__(self, n_width: int = 4,
                  n_height: int = 4,
                  normal_reward: float = -1,
-                 final_reward: float = -9):
+                 final_reward: float = 9):
         self.n_width = n_width  # width of the env calculated by number of cells.
         self.n_height = n_height  # height...
         self.len = n_width * n_height
@@ -51,3 +51,13 @@ class GridWorld(gym.Env, ABC):
             self.obs = temp[0] * 4 + temp[1]
             reward = self.normal_reward
         return self.obs, reward, done, info
+
+def test_env():
+    env = GridWorld()
+    obs = env.reset()
+    while True:
+        print(obs)
+        obs, _,_,_, = env.step(1)
+
+if __name__ == '__main__':
+    test_env()
