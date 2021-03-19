@@ -24,10 +24,10 @@ class GridWorld(gym.Env, ABC):
         self.neighbor_actions2 = {-4: -1, 4: 1, -1: 4, 1: -4}    # {up:left, down:right, left:down, right:up}
 
     def reset(self):
-        self.obs = np.random.randint(0, self.n_width * self.n_height - 1)
+        self.obs = np.random.randint(0, self.n_width * self.n_height - 1)  # [0, 15)
         return self.obs
 
-    def step(self, action):  # action = -4, +4, -1 +1 / up, down, left, right, action is an int number
+    def step(self, action):  # action = -4, +4, -1 +1 / up, down, left, right, action is an integer
         done = 0
         info = {}
         p = np.random.random()  # the random behavior
