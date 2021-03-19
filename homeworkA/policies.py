@@ -24,12 +24,11 @@ def generate_one_episode(env, policy, max_episode_number=1000):
     return observations, actions, rewards, dones
 
 
-def first_visit_monte_carlo_evaluate(gamma=GAMMA):
+def first_visit_monte_carlo_evaluate(gamma=GAMMA, number_of_episodes=100000):
     env = GridWorld()
     policy = Get_Action()
     values = np.zeros(16)
     returns = {state: list() for state in range(16)}
-    number_of_episodes = 10000
     for episode in range(number_of_episodes):
         observations, _, rewards, _ = generate_one_episode(env, policy)
         observations.pop()  # exclude the sT
