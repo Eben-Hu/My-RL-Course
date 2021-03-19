@@ -1,4 +1,3 @@
-from gridworld import GridWorld
 from policies import first_visit_monte_carlo_evaluate, q_learning
 import numpy as np
 
